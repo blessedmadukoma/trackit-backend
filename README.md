@@ -1,10 +1,12 @@
-## Golang Backend Template
+## TrackIT Backend
 
-This is a template guide on how my Go backend projects are structured.
+This is backend for the TrackIT project..
 
-Features Covered:
-1. user authentication i.e. registration and login using email with access and refresh tokens
+Features:
+1. user authentication
 2. session management
+3. transactions
+4. invoice and expense
 
 How to run:
 1. Clone the repository.
