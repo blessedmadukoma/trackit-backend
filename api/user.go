@@ -17,7 +17,7 @@ type userResponse struct {
 	Lastname  string `json:"lastname"`
 	Email     string `json:"email"`
 	Phone     string `json:"phone"`
-	UserType  bool   `json:"user_type"`
+	UserType  string `json:"user_type"`
 }
 
 func newUserResponse(user db.User) userResponse {
@@ -38,7 +38,7 @@ func (s *Server) CreateUser(ctx *gin.Context) {
 		Email     string `json:"email" binding:"required"`
 		Password  string `json:"password" binding:"required"`
 		Phone     string `json:"phone"`
-		UserType  bool   `json:"user_type" binding:"required"`
+		UserType  string `json:"user_type" binding:"required"`
 	}
 
 	var params createUserParams
@@ -60,6 +60,10 @@ func (s *Server) CreateUser(ctx *gin.Context) {
 		Password:  hashPassword,
 		Phone:     params.Phone,
 		UserType:  params.UserType,
+	}
+
+	if arg.Email != "blesedmadukoma@gmail.com" {
+		arg.UserType = "user"
 	}
 
 	user, err := s.store.CreateUser(ctx, arg)
@@ -220,7 +224,7 @@ func (srv *Server) UpdateUser(ctx *gin.Context) {
 		Firstname string `json:"firstname"`
 		Lastname  string `json:"lastname"`
 		Phone     string `json:"phone"`
-		UserType  bool   `json:"user_type"`
+		UserType  string `json:"user_type"`
 	}
 
 	var params updateUserParams

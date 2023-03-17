@@ -29,7 +29,7 @@ type User struct {
 	Email     string       `json:"email"`
 	Password  string       `json:"password"`
 	Phone     string       `json:"phone"`
-	UserType  bool         `json:"user_type"`
+	UserType  string       `json:"user_type"`
 	CreatedAt time.Time    `json:"created_at"`
 	UpdatedAt sql.NullTime `json:"updated_at"`
 }

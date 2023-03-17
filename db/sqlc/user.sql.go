@@ -24,7 +24,7 @@ type CreateUserParams struct {
 	Email     string `json:"email"`
 	Phone     string `json:"phone"`
 	Password  string `json:"password"`
-	UserType  bool   `json:"user_type"`
+	UserType  string `json:"user_type"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -170,7 +170,7 @@ type UpdateUserParams struct {
 	Lastname  string `json:"lastname"`
 	Password  string `json:"password"`
 	Email     string `json:"email"`
-	UserType  bool   `json:"user_type"`
+	UserType  string `json:"user_type"`
 	Phone     string `json:"phone"`
 }
 

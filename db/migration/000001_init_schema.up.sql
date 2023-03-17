@@ -5,7 +5,7 @@ CREATE TABLE "user" (
     "email" VARCHAR NOT NULL UNIQUE,
     "password" VARCHAR NOT NULL,
     "phone" VARCHAR NOT NULL,
-    "user_type" boolean NOT NULL,
+    "user_type" VARCHAR NOT NULL,
     "created_at" timestamptz NOT NULL DEFAULT (now()),
     "updated_at" timestamptz
 );
