@@ -9,4 +9,4 @@ CREATE TABLE "sessions" (
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
-ALTER TABLE "sessions" ADD FOREIGN KEY ("userid") REFERENCES "users" ("id");
+ALTER TABLE "sessions" ADD FOREIGN KEY ("userid") REFERENCES "user" ("id");

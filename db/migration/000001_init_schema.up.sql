@@ -11,4 +11,4 @@ CREATE TABLE "user" (
 );
 
 
-ALTER TABLE "tablename" ADD FOREIGN KEY ("userid") REFERENCES "user" ("id") ON DELETE SET DEFAULT;
+-- ALTER TABLE "tablename" ADD FOREIGN KEY ("userid") REFERENCES "user" ("id") ON DELETE SET DEFAULT;
