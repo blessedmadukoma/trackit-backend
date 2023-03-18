@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  # postgres:
+  #   image: postgres:12-alpine
+  #   environment:
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
+  #     - POSTGRES_DB=trackit_test
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_SOURCE=postgres://zypwgdad:qfaaZy7k6Xd_Y7xtMwSPG7IIyTuqRWl2@raja.db.elephantsql.com/zypwgdad?sslmode=disable&timezone=Africa/lagos
+      # - DB_SOURCE=postgresql://postgres:postgres@postgres:5432/trackit_test?sslmode=disable&timezone=Africa/lagos
+      - DB_DRIVER=postgres
+      - SERVER_ADDRESS=0.0.0.0:8080
+      - TOKEN_SYMMETRIC_KEY=12345678901234567890123456789012
+      - ACCESS_TOKEN_DURATION =15m
+      - REFRESH_TOKEN_DURATION =24h
+      - GIN_MODE=release
+    # depends_on:
+    #   - postgres
+    entrypoint: ["/app/wait-for.sh", "postgres:5432", "--", "/app/start.sh"]
+    command: ["/app/goTrackit"]
+  
+  # api1:
+  #   build: .
+  #   # dockerfile: Dockerfile
+  #   container_name: trackitapi
+  #   ports:
+  #     - "8089:8089"
+  #   environment:
+  #     DB_SOURCE: "postgres://zypwgdad:qfaaZy7k6Xd_Y7xtMwSPG7IIyTuqRWl2@raja.db.elephantsql.com/zypwgdad?sslmode=disable&timezone=Africa/lagos"
+  #     SERVER_ADDRESS: 8080
+  #   entrypoint: [ "/app/start.sh" ]

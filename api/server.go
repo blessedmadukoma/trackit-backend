@@ -60,7 +60,7 @@ func NewServer(config util.Config, store *db.Store) (*Server, error) {
 // StartServer runs the HTTP server on a specific address
 func (srv *Server) StartServer(address string) error {
 	fmt.Printf("Server starting on address: %s\n", address)
-	return srv.router.Run(fmt.Sprintf("0.0.0.0:%s", address))
+	return srv.router.Run(fmt.Sprintf(":%s", address))
 }
 
 // errorResponse handles the error response by using map[string]interface{} to return the error and it's message
