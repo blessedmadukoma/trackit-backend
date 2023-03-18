@@ -1,7 +1,6 @@
 package util
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/spf13/viper"
@@ -32,8 +31,6 @@ func LoadConfig(path string) (config Config, err error) {
 	if err != nil {
 		return
 	}
-
-	fmt.Println("See	config:", viper.AllSettings())
 
 	err = viper.Unmarshal(&config)
 	return
