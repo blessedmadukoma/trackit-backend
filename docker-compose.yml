@@ -14,8 +14,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DB_SOURCE=postgres://zypwgdad:qfaaZy7k6Xd_Y7xtMwSPG7IIyTuqRWl2@raja.db.elephantsql.com/zypwgdad?sslmode=disable&timezone=Africa/lagos
-      # - DB_SOURCE=postgresql://postgres:postgres@postgres:5432/trackit_test?sslmode=disable&timezone=Africa/lagos
+      - DB_SOURCE=postgresql://postgres:postgres@postgres:5432/trackit_test?sslmode=disable&timezone=Africa/lagos
       - DB_DRIVER=postgres
       - SERVER_ADDRESS=0.0.0.0:8080
       - TOKEN_SYMMETRIC_KEY=12345678901234567890123456789012
