@@ -25,14 +25,3 @@ services:
     #   - postgres
     entrypoint: ["/app/wait-for.sh", "postgres:5432", "--", "/app/start.sh"]
     command: ["/app/goTrackit"]
-  
-  # api1:
-  #   build: .
-  #   # dockerfile: Dockerfile
-  #   container_name: trackitapi
-  #   ports:
-  #     - "8089:8089"
-  #   environment:
-  #     DB_SOURCE: "postgres://zypwgdad:qfaaZy7k6Xd_Y7xtMwSPG7IIyTuqRWl2@raja.db.elephantsql.com/zypwgdad?sslmode=disable&timezone=Africa/lagos"
-  #     SERVER_ADDRESS: 8080
-  #   entrypoint: [ "/app/start.sh" ]
