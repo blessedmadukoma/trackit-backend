@@ -2,6 +2,7 @@ package api
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 	"time"
 	db "trackit/db/sqlc"
@@ -37,8 +38,8 @@ func (s *Server) CreateUser(ctx *gin.Context) {
 		Lastname  string `json:"lastname" binding:"required"`
 		Email     string `json:"email" binding:"required"`
 		Password  string `json:"password" binding:"required"`
-		Phone     string `json:"phone"`
-		UserType  string `json:"user_type" binding:"required"`
+		Phone     string `json:"phone" binding:"required"`
+		UserType  string `json:"user_type"`
 	}
 
 	var params createUserParams
@@ -53,6 +54,13 @@ func (s *Server) CreateUser(ctx *gin.Context) {
 		return
 	}
 
+	switch params.Email {
+	case "blessedmadukoma@gmail.com":
+		params.UserType = "admin"
+	default:
+		params.UserType = "user"
+	}
+
 	arg := db.CreateUserParams{
 		Firstname: params.Firstname,
 		Lastname:  params.Lastname,
@@ -60,10 +68,6 @@ func (s *Server) CreateUser(ctx *gin.Context) {
 		Password:  hashPassword,
 		Phone:     params.Phone,
 		UserType:  params.UserType,
-	}
-
-	if arg.Email != "blesedmadukoma@gmail.com" {
-		arg.UserType = "user"
 	}
 
 	user, err := s.store.CreateUser(ctx, arg)
@@ -77,7 +81,7 @@ func (s *Server) CreateUser(ctx *gin.Context) {
 }
 
 func (srv *Server) loginUser(ctx *gin.Context) {
-	type LoginUserRequest struct {
+	type loginUserRequest struct {
 		Email    string `json:"email" binding:"required"`
 		Password string `json:"password" binding:"required,min=5"`
 	}
@@ -91,12 +95,14 @@ func (srv *Server) loginUser(ctx *gin.Context) {
 		User                  userResponse `json:"user"`
 	}
 
-	var req LoginUserRequest
+	var req loginUserRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse("error in login parameters", err))
 		return
 	}
+
+	fmt.Println("req:", req)
 
 	user, err := srv.store.GetUserByEmail(ctx, req.Email)
 	if err != nil {
@@ -132,6 +138,7 @@ func (srv *Server) loginUser(ctx *gin.Context) {
 	session, err := srv.store.CreateSession(ctx, db.CreateSessionParams{
 		ID:           refreshPayload.ID,
 		Userid:       user.ID,
+		Email:        user.Email,
 		RefreshToken: refreshToken,
 		UserAgent:    ctx.Request.UserAgent(),
 		ClientIp:     ctx.ClientIP(),
@@ -153,12 +160,41 @@ func (srv *Server) loginUser(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, response)
+	return
 }
 
 // func (srv *Server) LogoutUser(ctx *gin.Context) {
 // 	ctx.JSON(http.StatusOK, gin.H{"message": "User logged out successfully"})
 // 	return
 // }
+
+// getCurrentUserBySession gets the current user by session
+func (srv *Server) getCurrentUserBySession(ctx *gin.Context) {
+	token := ctx.Request.Header.Get("Authorization")
+
+	payload, err := srv.tokenMaker.VerifyToken(token)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, errorResponse("error verifying token", err))
+		return
+	}
+
+	user, err := srv.store.GetUserByEmail(ctx, payload.Email)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, errorResponse("error getting user", err))
+		return
+	}
+
+	type getCurrentUserResponse struct {
+		User userResponse `json:"user"`
+	}
+
+	response := getCurrentUserResponse{
+		User: newUserResponse(user),
+	}
+
+	ctx.JSON(http.StatusOK, response)
+	return
+}
 
 func (srv *Server) GetUserByEmail(ctx *gin.Context) {
 

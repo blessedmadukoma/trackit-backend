@@ -14,6 +14,7 @@ import (
 type Session struct {
 	ID           uuid.UUID `json:"id"`
 	Userid       int64     `json:"userid"`
+	Email        string    `json:"email"`
 	RefreshToken string    `json:"refresh_token"`
 	UserAgent    string    `json:"user_agent"`
 	ClientIp     string    `json:"client_ip"`

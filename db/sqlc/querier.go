@@ -15,6 +15,11 @@ type Querier interface {
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	DeleteUser(ctx context.Context, id int64) error
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
+	// -- name: GetSessionByAccessToken :one
+	// SELECT * FROM sessions
+	// WHERE email = $1
+	// ORDER BY created_at DESC LIMIT 1;
+	GetSessionByEmail(ctx context.Context, email string) (Session, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id int64) (User, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)

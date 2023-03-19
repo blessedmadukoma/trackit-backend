@@ -16,20 +16,22 @@ const createSession = `-- name: CreateSession :one
 INSERT INTO sessions (
  id,
  userid,
+ email,
  refresh_token,
  user_agent,
  client_ip,
  is_blocked,
  expires_at
 ) VALUES (
- $1, $2, $3, $4, $5, $6, $7
+ $1, $2, $3, $4, $5, $6, $7, $8
 )
-RETURNING id, userid, refresh_token, user_agent, client_ip, is_blocked, expires_at, created_at
+RETURNING id, userid, email, refresh_token, user_agent, client_ip, is_blocked, expires_at, created_at
 `
 
 type CreateSessionParams struct {
 	ID           uuid.UUID `json:"id"`
 	Userid       int64     `json:"userid"`
+	Email        string    `json:"email"`
 	RefreshToken string    `json:"refresh_token"`
 	UserAgent    string    `json:"user_agent"`
 	ClientIp     string    `json:"client_ip"`
@@ -41,6 +43,7 @@ func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (S
 	row := q.db.QueryRowContext(ctx, createSession,
 		arg.ID,
 		arg.Userid,
+		arg.Email,
 		arg.RefreshToken,
 		arg.UserAgent,
 		arg.ClientIp,
@@ -51,6 +54,7 @@ func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (S
 	err := row.Scan(
 		&i.ID,
 		&i.Userid,
+		&i.Email,
 		&i.RefreshToken,
 		&i.UserAgent,
 		&i.ClientIp,
@@ -62,7 +66,7 @@ func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (S
 }
 
 const getSession = `-- name: GetSession :one
-SELECT id, userid, refresh_token, user_agent, client_ip, is_blocked, expires_at, created_at FROM sessions 
+SELECT id, userid, email, refresh_token, user_agent, client_ip, is_blocked, expires_at, created_at FROM sessions 
 WHERE id = $1 LIMIT 1
 `
 
@@ -72,6 +76,35 @@ func (q *Queries) GetSession(ctx context.Context, id uuid.UUID) (Session, error)
 	err := row.Scan(
 		&i.ID,
 		&i.Userid,
+		&i.Email,
+		&i.RefreshToken,
+		&i.UserAgent,
+		&i.ClientIp,
+		&i.IsBlocked,
+		&i.ExpiresAt,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const getSessionByEmail = `-- name: GetSessionByEmail :one
+
+SELECT id, userid, email, refresh_token, user_agent, client_ip, is_blocked, expires_at, created_at FROM sessions
+WHERE email = $1
+ORDER BY created_at DESC LIMIT 1
+`
+
+// -- name: GetSessionByAccessToken :one
+// SELECT * FROM sessions
+// WHERE email = $1
+// ORDER BY created_at DESC LIMIT 1;
+func (q *Queries) GetSessionByEmail(ctx context.Context, email string) (Session, error) {
+	row := q.db.QueryRowContext(ctx, getSessionByEmail, email)
+	var i Session
+	err := row.Scan(
+		&i.ID,
+		&i.Userid,
+		&i.Email,
 		&i.RefreshToken,
 		&i.UserAgent,
 		&i.ClientIp,
