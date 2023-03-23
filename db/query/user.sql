@@ -38,8 +38,8 @@ RETURNING *;
 DELETE FROM "user"
 WHERE id = $1;
 
--- name: GetCurrentUserByAccessToken :one
-SELECT * FROM "user"
-WHERE email = $1
-LEFT JOIN users ON users.email = sessions.email
-ORDER BY created_at DESC LIMIT 1;
+-- -- name: GetCurrentUserByAccessToken :one
+-- SELECT * FROM "user"
+-- WHERE email = $1
+-- LEFT JOIN users ON users.email = sessions.email
+-- ORDER BY created_at DESC LIMIT 1;

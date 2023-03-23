@@ -28,6 +28,18 @@ func Routes(router *gin.Engine, srv *Server) {
 			userRoute.GET("/:id", srv.GetUserByID)
 			// userRoute.GET("/:email", srv.GetUserByEmail)
 
+			userRoute.POST("/expense", srv.CreateExpense)
+			userRoute.GET("/expense", srv.GetExpenses)
+		}
+
+		// expense routes
+		expenseRoute := routes.Group("/expense")
+		{
+			expenseRoute.POST("/", srv.CreateExpense)
+			expenseRoute.GET("/", srv.GetExpenses)
+			// expenseRoute.GET("/:id", srv.GetExpenseByID)
+			// expenseRoute.PUT("/:id", srv.UpdateExpense)
+			// expenseRoute.DELETE("/:id", srv.DeleteExpense)
 		}
 	}
 }

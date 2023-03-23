@@ -86,31 +86,3 @@ func (q *Queries) GetSession(ctx context.Context, id uuid.UUID) (Session, error)
 	)
 	return i, err
 }
-
-const getSessionByEmail = `-- name: GetSessionByEmail :one
-
-SELECT id, userid, email, refresh_token, user_agent, client_ip, is_blocked, expires_at, created_at FROM sessions
-WHERE email = $1
-ORDER BY created_at DESC LIMIT 1
-`
-
-// -- name: GetSessionByAccessToken :one
-// SELECT * FROM sessions
-// WHERE email = $1
-// ORDER BY created_at DESC LIMIT 1;
-func (q *Queries) GetSessionByEmail(ctx context.Context, email string) (Session, error) {
-	row := q.db.QueryRowContext(ctx, getSessionByEmail, email)
-	var i Session
-	err := row.Scan(
-		&i.ID,
-		&i.Userid,
-		&i.Email,
-		&i.RefreshToken,
-		&i.UserAgent,
-		&i.ClientIp,
-		&i.IsBlocked,
-		&i.ExpiresAt,
-		&i.CreatedAt,
-	)
-	return i, err
-}

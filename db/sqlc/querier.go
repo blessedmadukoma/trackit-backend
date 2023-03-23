@@ -11,18 +11,21 @@ import (
 )
 
 type Querier interface {
+	CreateExpense(ctx context.Context, arg CreateExpenseParams) (Expense, error)
 	CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
+	DeleteExpenses(ctx context.Context, id int64) error
 	DeleteUser(ctx context.Context, id int64) error
+	GetExpensesByID(ctx context.Context, id int64) (Expense, error)
+	GetExpensesByUserEmail(ctx context.Context, email string) (Expense, error)
+	GetExpensesByUserID(ctx context.Context, userid int64) (Expense, error)
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
-	// -- name: GetSessionByAccessToken :one
-	// SELECT * FROM sessions
-	// WHERE email = $1
-	// ORDER BY created_at DESC LIMIT 1;
-	GetSessionByEmail(ctx context.Context, email string) (Session, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id int64) (User, error)
+	ListExpenses(ctx context.Context, arg ListExpensesParams) ([]Expense, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
+	// WHERE email = $1
+	UpdateExpenses(ctx context.Context, arg UpdateExpensesParams) (Expense, error)
 	// WHERE email = $1
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 }
