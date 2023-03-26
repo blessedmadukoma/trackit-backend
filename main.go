@@ -14,7 +14,8 @@ import (
 func main() {
 	fmt.Println("Hello from TrackIT! Starting Server...")
 
-	config, err := util.LoadConfig(".")
+	// config, err := util.LoadConfig(".")
+	config, err := util.LoadEnvConfig(".")
 	if err != nil {
 		log.Fatal("Cannot load config:", err)
 	}

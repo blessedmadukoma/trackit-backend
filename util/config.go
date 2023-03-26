@@ -1,8 +1,11 @@
 package util
 
 import (
+	"log"
+	"os"
 	"time"
 
+	_ "github.com/joho/godotenv/autoload"
 	"github.com/spf13/viper"
 )
 
@@ -29,9 +32,23 @@ func LoadConfig(path string) (config Config, err error) {
 
 	err = viper.ReadInConfig()
 	if err != nil {
+		log.Println("Error loading .env:", err)
 		return
 	}
 
 	err = viper.Unmarshal(&config)
+	return
+}
+
+// LoadEnvConfig reads configuration from file or env variables
+func LoadEnvConfig(path string) (config Config, err error) {
+	config.GinMode = os.Getenv("GIN_MODE")
+	config.DBDriver = os.Getenv("DB_DRIVER")
+	config.DBSource = os.Getenv("DB_SOURCE")
+	config.ServerAddress = os.Getenv("SERVER_ADDRESS")
+	config.TokenSymmetricKey = os.Getenv("TOKEN_SYMMETRIC_KEY")
+	config.AccessTokenDuration, _ = time.ParseDuration(os.Getenv("ACCESS_TOKEN_DURATION"))
+	config.RefreshTokenDuration, _ = time.ParseDuration(os.Getenv("REFRESH_TOKEN_DURATION"))
+
 	return
 }
