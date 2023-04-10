@@ -67,7 +67,7 @@ func getAuthorizationPayload(ctx *gin.Context) (*token.Payload, error) {
 
 // setCorsHeaders sets the CORS headers
 func setCorsHeaders(corsConfig *cors.Config) {
-	corsConfig.AllowOrigins = []string{"https://localhost", "http://localhost", "http://localhost:3000", "https://localhost:3000"}
+	corsConfig.AllowOrigins = []string{"https://localhost", "http://localhost", "http://localhost:3000", "https://localhost:3000", "https://trakkit.vercel.app", "http://trakkit.vercel.app"}
 
 	corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization", "X-Requested-With", "Accept", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Access-Control-Allow-Methods", "Access-Control-Allow-Credentials", "Access-Control-Max-Age", "Access-Control-Expose-Headers", "Access-Control-Request-Headers", "Access-Control-Request-Method", "X-Forwarded-For", "X-Forwarded-Host", "X-Forwarded-Port", "X-Forwarded-Proto", "X-Real-Ip", "X-Request-Id", "X-Scheme", "X-Forwarded-Proto", "X-Forwarded-Protocol", "X-Forwarded-Ssl", "X-Url-Scheme", "X-Forwarded-Host", "X-Forwarded-Server", "X-Forwarded-For", "withCredentials"}
 
