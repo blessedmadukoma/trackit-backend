@@ -50,5 +50,5 @@ func LoadEnvConfig(path string) (config Config, err error) {
 	config.AccessTokenDuration, _ = time.ParseDuration(os.Getenv("ACCESS_TOKEN_DURATION"))
 	config.RefreshTokenDuration, _ = time.ParseDuration(os.Getenv("REFRESH_TOKEN_DURATION"))
 
-	return
+	return config, nil
 }
