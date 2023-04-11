@@ -42,15 +42,14 @@ func NewServer(config util.Config, store *db.Store) (*Server, error) {
 
 	router := gin.Default()
 
-	// corsConfig := cors.Default()
-	// router.Use(corsConfig)
-	
-	corsConfig := cors.DefaultConfig()
+	corsConfig := cors.Default()
+	router.Use(corsConfig)
 
-	setCorsHeaders(&corsConfig)
+	// corsConfig := cors.DefaultConfig()
 
-	router.Use(cors.New(corsConfig))
+	// setCorsHeaders(&corsConfig)
 
+	// router.Use(cors.New(corsConfig))
 
 	// do not trust all proxies
 	// router.SetTrustedProxies([]string{"127.0.0.1", "localhost"})
