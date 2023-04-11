@@ -33,7 +33,8 @@ func main() {
 		log.Fatal("cannot create server:", err)
 	}
 
-	err = server.StartServer(config.ServerAddress)
+	// err = server.StartServer(config.ServerAddress)
+	err = server.StartServer(config.Port)
 	if err != nil {
 		log.Fatal("cannot start server!")
 	}
