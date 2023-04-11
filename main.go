@@ -15,10 +15,10 @@ func main() {
 	fmt.Println("Hello from TrackIT! Starting Server...")
 
 	// config, err := util.LoadConfig(".")
-	config, err := util.LoadEnvConfig(".")
-	if err != nil {
-		log.Fatal("Cannot load config:", err)
-	}
+	// if err != nil {
+	// 	log.Fatal("Cannot load config:", err)
+	// }
+	config := util.LoadEnvConfig(".")
 	// connect to database
 	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {

@@ -6,6 +6,8 @@ import (
 	"time"
 
 	_ "github.com/joho/godotenv/autoload"
+
+	_ "github.com/lib/pq"
 	"github.com/spf13/viper"
 )
 
@@ -41,7 +43,7 @@ func LoadConfig(path string) (config Config, err error) {
 }
 
 // LoadEnvConfig reads configuration from file or env variables
-func LoadEnvConfig(path string) (config Config, err error) {
+func LoadEnvConfig(path string) (config Config) {
 	config.GinMode = os.Getenv("GIN_MODE")
 	config.DBDriver = os.Getenv("DB_DRIVER")
 	config.DBSource = os.Getenv("DB_SOURCE")
@@ -50,5 +52,5 @@ func LoadEnvConfig(path string) (config Config, err error) {
 	config.AccessTokenDuration, _ = time.ParseDuration(os.Getenv("ACCESS_TOKEN_DURATION"))
 	config.RefreshTokenDuration, _ = time.ParseDuration(os.Getenv("REFRESH_TOKEN_DURATION"))
 
-	return config, nil
+	return config
 }
