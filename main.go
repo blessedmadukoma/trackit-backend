@@ -19,7 +19,8 @@ func main() {
 	// 	log.Fatal("Cannot load config:", err)
 	// }
 	config := util.LoadEnvConfig(".")
-	fmt.Println(config)
+	// fmt.Println(config)
+
 	// connect to database
 	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
