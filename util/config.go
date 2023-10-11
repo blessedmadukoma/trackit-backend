@@ -3,6 +3,7 @@ package util
 import (
 	"log"
 	"os"
+	"strconv"
 	"time"
 
 	_ "github.com/joho/godotenv/autoload"
@@ -20,6 +21,11 @@ type Config struct {
 	Port                 string        `mapstructure:"PORT"`
 	AccessTokenDuration  time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
 	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
+	Limiter              struct {
+		RPS     float64
+		BURST   int
+		ENABLED bool
+	}
 	// ServerAddress        string        `mapstructure:"SERVER_ADDRESS"`
 }
 
@@ -54,5 +60,30 @@ func LoadEnvConfig(path string) (config Config) {
 	config.AccessTokenDuration, _ = time.ParseDuration(os.Getenv("ACCESS_TOKEN_DURATION"))
 	config.RefreshTokenDuration, _ = time.ParseDuration(os.Getenv("REFRESH_TOKEN_DURATION"))
 
+	// retrieve rate limit values
+	rateRPS, rateBurst, rateEnabled := rateLimitValues()
+	config.Limiter.RPS = float64(rateRPS)
+	config.Limiter.BURST = rateBurst
+	config.Limiter.ENABLED = rateEnabled
+
 	return config
+}
+
+// rateLimitValues retreives the values for the rate limiter from the env
+func rateLimitValues() (int, int, bool) {
+
+	rps, err := strconv.Atoi(os.Getenv("LIMITER_RPS"))
+	if err != nil {
+		log.Fatal("Error retrieving rps value:", err)
+	}
+	burst, err := strconv.Atoi(os.Getenv("LIMITER_BURST"))
+	if err != nil {
+		log.Fatal("Error retrieving burst value:", err)
+	}
+	enabled, err := strconv.ParseBool(os.Getenv("LIMITER_ENABLED"))
+	if err != nil {
+		log.Fatal("Error retrieving enabled value:", err)
+	}
+
+	return rps, burst, enabled
 }

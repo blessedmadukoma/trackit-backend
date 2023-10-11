@@ -7,7 +7,6 @@ import (
 	"trackit/token"
 	"trackit/util"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -45,10 +44,13 @@ func NewServer(config util.Config, store *db.Store) (*Server, error) {
 	// corsConfig := cors.Default()
 	// router.Use(corsConfig)
 
-	corsConfig := cors.DefaultConfig()
-	setCorsHeaders(&corsConfig)
+	// corsConfig := cors.DefaultConfig()
+	// setCorsHeaders(&corsConfig)
 
-	router.Use(cors.New(corsConfig))
+	// router.Use(cors.New(corsConfig))
+
+	router.Use(CORS())
+	router.Use(server.rateLimit())
 
 	// do not trust all proxies
 	// router.SetTrustedProxies([]string{"127.0.0.1", "localhost"})
@@ -66,9 +68,4 @@ func NewServer(config util.Config, store *db.Store) (*Server, error) {
 func (srv *Server) StartServer(address string) error {
 	fmt.Printf("Server starting on address: %s\n", address)
 	return srv.router.Run(fmt.Sprintf(":%s", address))
-}
-
-// errorResponse handles the error response by using map[string]interface{} to return the error and it's message
-func errorResponse(s string, err error) gin.H {
-	return gin.H{"error": s + " -> " + err.Error()}
 }
