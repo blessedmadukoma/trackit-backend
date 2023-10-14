@@ -33,19 +33,30 @@ func newExpenseResponse(expense db.Expense) expenseResponse {
 	}
 }
 
+type expenseParams struct {
+	Userid      int64     `json:"userid"`
+	Email       string    `json:"email"`
+	Amount      string    `json:"amount" binding:"required"`
+	Description string    `json:"description" binding:"required"`
+	Tag         string    `json:"tag" binding:"required"`
+	Date        time.Time `json:"date" binding:"required"`
+	// budgetid int64 `json:"budgetid" binding:"required"`
+	Created_at time.Time `json:"created_at"`
+	Updated_at time.Time `json:"updated_at"`
+}
+
+// createExpense   godoc
+//
+//	@Summary		Create Expense Transaction
+//	@Description	Responds with a newly created expense record as JSON.
+//	@Tags			expense
+//	@Produce		json
+//	@Param			params	body		expenseParams	true	"Expense JSON"
+//	@Success		201		{object}	expenseResponse
+//	@Security		BearerAuth
+//	@Router			/expense [post]
 func (srv *Server) CreateExpense(ctx *gin.Context) {
 	fmt.Println("context:", ctx)
-	type expenseParams struct {
-		Userid      int64     `json:"userid"`
-		Email       string    `json:"email"`
-		Amount      string    `json:"amount" binding:"required"`
-		Description string    `json:"description" binding:"required"`
-		Tag         string    `json:"tag" binding:"required"`
-		Date        time.Time `json:"date" binding:"required"`
-		// budgetid int64 `json:"budgetid" binding:"required"`
-		Created_at time.Time `json:"created_at"`
-		Updated_at time.Time `json:"updated_at"`
-	}
 
 	token := ctx.Request.Header.Get("Authorization")
 
@@ -101,11 +112,23 @@ func (srv *Server) CreateExpense(ctx *gin.Context) {
 	return
 }
 
+type listExpensesRequest struct {
+	PageID   int32 `form:"page_id" binding:"required,min=1"`
+	PageSize int32 `form:"page_size" binding:"required,min=5,max=10"`
+}
+
+// createExpense   godoc
+//
+//	@Summary		Get Expenses Transactions
+//	@Description	Responds with a list of expense records as JSON.
+//	@Tags			expense
+//	@Produce		json
+//	@Param			params	body	listExpensesRequest	true	"Expense JSON"
+//	@Success		200		{array}	expenseResponse
+//	@Security		BearerAuth
+//	@Router			/expense [get]
 func (srv *Server) GetExpenses(ctx *gin.Context) {
-	type listExpensesRequest struct {
-		PageID   int32 `form:"page_id" binding:"required,min=1"`
-		PageSize int32 `form:"page_size" binding:"required,min=5,max=10"`
-	}
+
 	var req listExpensesRequest
 	if err := ctx.ShouldBindQuery(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse("user input not valid", err))

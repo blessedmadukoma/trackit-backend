@@ -7,6 +7,7 @@ import (
 
 	db "trackit/db/sqlc"
 	"trackit/util"
+
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 	"github.com/stretchr/testify/require"

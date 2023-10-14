@@ -46,10 +46,19 @@ sqlc:
 test:
 		go test -v -cover ./...
 
+## docs: generate docs
+docs:
+	swag init --parseDependency 
+	# swag fmt
+
 server:
 		go run main.go
+		# air
+
+air: docs
+	air
 	
 mock:
 		mockgen -package mockdb -destination db/mock/store.go trackit/db/sqlc Store
 
-.PHONY: postgres createdb dropdb psql createmigration migrateup migratedown migrateup1 migratedown1 sqlc test server mock dc
+.PHONY: air docs postgres createdb dropdb psql createmigration migrateup migratedown migrateup1 migratedown1 sqlc test server mock dc

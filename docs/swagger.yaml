@@ -1,0 +1,78 @@
+basePath: /api/
+definitions:
+  api.expenseResponse:
+    properties:
+      amount:
+        type: string
+      created_at:
+        description: budgetid int64 `json:"budgetid" binding:"required"`
+        type: string
+      date:
+        type: string
+      description:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      updated_at:
+        type: string
+      userid:
+        type: integer
+    type: object
+  api.listExpensesRequest:
+    properties:
+      page_id:
+        minimum: 1
+        type: integer
+      page_size:
+        maximum: 10
+        minimum: 5
+        type: integer
+    required:
+    - page_id
+    - page_size
+    type: object
+host: https://trackit-blessedmadukoma.koyeb.app
+info:
+  contact:
+    email: blessedmadukoma@gmail.com
+    name: Madukoma Blessed
+    url: https://mblessed.vercel.app
+  description: Backend for TrakkIT, a financial management tracking tool
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://trakkit.vercel.app
+  title: Trakkit Backend
+  version: "1.0"
+paths:
+  /expense:
+    get:
+      description: Responds with a list of expense records as JSON.
+      parameters:
+      - description: Expense JSON
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/api.listExpensesRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/api.expenseResponse'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Get Expenses Transactions
+      tags:
+      - expense
+    post:
+      responses: {}
+schemes:
+- https
+swagger: "2.0"
